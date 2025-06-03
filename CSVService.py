@@ -4,6 +4,8 @@ class CSVService:
     def __init__(self):
         self.csvFilePath = 'expenseTracker.csv'
         self.asyncQueue = queue.Queue()
+        self.loadThread = None
+        self.writeThread = None
 
     def convert_listdict_to_csv(self, data: list[dict]) -> str:
         """Convert a list of dictionaries to a CSV string."""
@@ -37,8 +39,10 @@ class CSVService:
     
     def load_csv_async(self):
         """Load CSV data asynchronously."""
-        Thread(target=self.read_csv).start()
+        self.loadThread = Thread(target=self.read_csv)
+        self.loadThread.start()
         
     def write_csv_async(self, data):
         """Write data to the CSV file asynchronously."""
-        Thread(target=self.write_csv, args=(data,)).start()
+        self.writeThread = Thread(target=self.write_csv, args=(data,))
+        self.writeThread.start()

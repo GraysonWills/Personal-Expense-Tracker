@@ -4,10 +4,50 @@ class StateManager:
     def __init__(self):
         self._expenses = []
         self._budget = float('inf') # Set to infinity by default to mean that no budget is set
-        self._totalSpent = 0
+        self._totalSpent = 0.0 # Set to 0.0 to avoid issues with float precision
+
 
     def get_expenses(self) -> list[dict]:
         return self._expenses
+
+    
+    def set_expenses(self, expenses: list[dict]) -> str:
+        self._expenses = expenses
+        return "Expenses set successfully"
+    
+    
+    def get_budget(self) -> float:
+        return self._budget
+    
+    
+    def set_budget(self, budget: float) -> tuple[str, bool]:
+        
+        reason, isValid = self.validate_budget(budget)
+        
+        if not isValid:
+            return reason, False
+        
+        self._budget = budget
+        
+        return "Budget set successfully", True
+
+    
+    def validate_budget(self, budget: float) -> tuple[str, bool]:
+        return self.validate_number(budget)
+
+    
+    def get_total_spent(self) -> float:
+        return self._totalSpent
+    
+    
+    def check_budget(self) -> bool:
+        """Check if the budget has been exceeded."""
+        
+        if self._totalSpent > self._budget:
+            return False
+        
+        return True
+    
     
     def create_expense(self, **kwargs) -> str: # Wanted to practice using **kwargs, should be guaranteed to receive these keys
         
@@ -27,6 +67,7 @@ class StateManager:
 
         return reason
     
+    
     def validate_expense(self, **kwargs) -> tuple[str, bool]:
 
         """Validate if the expense is valid."""
@@ -43,16 +84,24 @@ class StateManager:
         if not kwargs.get('category'):
             return "Category is required.", False
         
-        if not isinstance(kwargs.get('amount'), (int, float)):
-            return "Invalid amount. Amount must be a number.", False
+        reason, isValid = self.validate_amount(kwargs.get('amount', 0))
         
-        if kwargs['amount'] <= 0:
-            return "Invalid amount. Amount must be positive.", False
-        
-        if isinstance(kwargs['amount'], float) and len(str(kwargs['amount']).split('.')[-1]) > 2:
-            return "Invalid amount. Amount cannot have more than 2 decimal places.", False        
-        
+        if not isValid:
+            return reason, False
+
         if not kwargs.get('description'):
             return "Description is required.", False
         
         return "You're expense has been added successfully", True
+    
+    def validate_amount(self, value: str) -> tuple[str, bool]:
+        """Validate if the input is a number."""
+        if not isinstance(value, (int, float)):
+            return "Invalid amount. Amount must be a number.", False
+        
+        if value <= 0:
+            return "Invalid amount. Amount must be positive.", False
+        
+        if isinstance(value, float) and len(str(value).split('.')[-1]) > 2:
+            return "Invalid amount. Amount cannot have more than 2 decimal places.", False        
+        
