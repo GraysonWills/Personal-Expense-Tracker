@@ -2,15 +2,15 @@ from threading import Thread
 import queue
 class CSVService:
     def __init__(self):
-        self.csv_file_path = 'expenseTracker.csv'
-        self.async_queue = queue.Queue()
+        self.csvFilePath = 'expenseTracker.csv'
+        self.asyncQueue = queue.Queue()
 
     def convert_listdict_to_csv(self, data: list[dict]) -> str:
         """Convert a list of dictionaries to a CSV string."""
-        csv_string = 'Date,Category,Amount,Description\n'
+        csvString = 'Date,Category,Amount,Description\n'
         for item in data:
-            csv_string += f'{item["Date"]},{item["Category"]},{item["Amount"]},{item["Description"]}\n'
-        return csv_string
+            csvString += f'{item["date"]},{item["category"]},{item["amount"]},{item["description"]}\n'
+        return csvString
     
     def convert_csv_to_listdict(self, csv_data: str) -> list[dict]:
         """Convert a CSV string to a list of dictionaries."""
@@ -25,15 +25,15 @@ class CSVService:
     
     def read_csv(self):
         """Read the CSV file and return its content."""
-        with open(self.csv_file_path, 'r') as file:
+        with open(self.csvFilePath, 'r') as file:
             fullCSV = file.read()
-        self.async_queue.put(self.convert_csv_to_listdict(fullCSV))
+        self.asyncQueue.put(self.convert_csv_to_listdict(fullCSV))
 
     def write_csv(self, data):
         """Write data to the CSV file."""
-        csv_string = self.convert_listdict_to_csv(data)
-        with open(self.csv_file_path, 'w') as file:
-            file.writelines(csv_string)
+        csvString = self.convert_listdict_to_csv(data)
+        with open(self.csvFilePath, 'w') as file:
+            file.writelines(csvString)
     
     def load_csv_async(self):
         """Load CSV data asynchronously."""
