@@ -29,7 +29,7 @@ class UIManager(CSVService, StateManager):
         print("-" * 57)
         
         for expense in expenses:
-        
+
             print("{:<12} {:<15} ${:<9.2f} {:<20}".format(
                 expense.get_key('date'),
                 expense.get_key('category'),
@@ -90,7 +90,7 @@ class UIManager(CSVService, StateManager):
         
                 self.write_csv_async(self.get_expenses())
         
-                self.writeThread.join()
+                self._writeThread.join()
         
                 print("Expenses saved successfully.")
 
@@ -104,7 +104,7 @@ class UIManager(CSVService, StateManager):
         
                     choice = input("Select an option: ")
         
-                    self.loadThread.join()  # Wait for the thread to finish loading
+                    self._loadThread.join()  # Wait for the thread to finish loading
         
                     if choice == '1':
                         self.set_expenses(list(set(self.get_expenses()) | set(self.asyncQueue.get())))
