@@ -1,4 +1,6 @@
 import datetime
+from ExpenseClass import Expense
+
 class StateManager:
 
     def __init__(self):
@@ -7,11 +9,11 @@ class StateManager:
         self._totalSpent = 0.0 # Set to 0.0 to avoid issues with float precision
 
 
-    def get_expenses(self) -> list[dict]:
+    def get_expenses(self) -> list[Expense]:
         return self._expenses
 
     
-    def set_expenses(self, expenses: list[dict]) -> str:
+    def set_expenses(self, expenses: list[Expense]) -> str:
         self._expenses = expenses
         return "Expenses set successfully"
     
@@ -55,15 +57,15 @@ class StateManager:
         if not isValid:
             return f"Invalid expense data: {reason}"
         
-        expense = {
-            'date': kwargs.get('date', ''),
-            'category': kwargs.get('category', ''),
-            'amount': kwargs.get('amount', 0),
-            'description': kwargs.get('description', '')
-        }
+        expense = Expense(
+            date=kwargs.get('date'), 
+            category=kwargs.get('category'), 
+            amount=kwargs.get('amount'), 
+            description=kwargs.get('description')
+            )
 
         self._expenses.append(expense)
-        self._totalSpent += expense['amount']
+        self._totalSpent += expense.get_key('amount')
 
         return reason
     
@@ -94,8 +96,8 @@ class StateManager:
         
         return "You're expense has been added successfully", True
     
-    def validate_amount(self, value: str) -> tuple[str, bool]:
-        """Validate if the input is a number."""
+    def validate_amount(self, value: float) -> tuple[str, bool]:
+
         if not isinstance(value, (int, float)):
             return "Invalid amount. Amount must be a number.", False
         
