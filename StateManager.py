@@ -33,7 +33,7 @@ class StateManager:
 
     
     def validate_budget(self, budget: float) -> tuple[str, bool]:
-        return self.validate_number(budget)
+        return self.validate_amount(budget)
 
     
     def get_total_spent(self) -> float:
@@ -63,7 +63,7 @@ class StateManager:
         }
 
         self._expenses.append(expense)
-        self._totalSpent += expense['Amount']
+        self._totalSpent += expense['amount']
 
         return reason
     
@@ -103,5 +103,7 @@ class StateManager:
             return "Invalid amount. Amount must be positive.", False
         
         if isinstance(value, float) and len(str(value).split('.')[-1]) > 2:
-            return "Invalid amount. Amount cannot have more than 2 decimal places.", False        
+            return "Invalid amount. Amount cannot have more than 2 decimal places.", False     
+
+        return "Valid amount.", True
         

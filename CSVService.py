@@ -17,7 +17,7 @@ class CSVService:
     def convert_csv_to_listdict(self, csv_data: str) -> list[dict]:
         """Convert a CSV string to a list of dictionaries."""
         lines = csv_data.strip().split('\n')
-        headers = lines[0].split(',')
+        headers = lines[0].lower().split(',')
         data = []
         for line in lines[1:]:
             values = line.split(',')
