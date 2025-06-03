@@ -7,14 +7,12 @@ class UIManager(CSVService, StateManager):
         CSVService.__init__(self)
         StateManager.__init__(self)
 
-    
-
     def create_an_expense(self):
         date = input("Enter date (YYYY-MM-DD): ")
 
         category = input("Enter category: ")
         
-        amount = float(input("Enter amount: "))
+        amount = float(input("Enter amount: $"))
         
         description = input("Enter description: ")
         
@@ -33,10 +31,10 @@ class UIManager(CSVService, StateManager):
         for expense in expenses:
         
             print("{:<12} {:<15} ${:<9.2f} {:<20}".format(
-                expense['date'],
-                expense['category'],
-                float(expense['amount']),
-                expense['description']
+                expense.get_key('date'),
+                expense.get_key('category'),
+                expense.get_key('amount'),
+                expense.get_key('description')
             ))
 
     def set_a_budget(self) -> str:

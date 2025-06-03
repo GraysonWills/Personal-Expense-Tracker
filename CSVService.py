@@ -1,5 +1,6 @@
 from threading import Thread
 import queue
+from ExpenseClass import Expense
 class CSVService:
     def __init__(self):
         self.csvFilePath = 'expenseTracker.csv'
@@ -7,21 +8,26 @@ class CSVService:
         self.loadThread = None
         self.writeThread = None
 
-    def convert_listdict_to_csv(self, data: list[dict]) -> str:
+    def convert_listdict_to_csv(self, data: list[Expense]) -> str:
         """Convert a list of dictionaries to a CSV string."""
-        csvString = 'Date,Category,Amount,Description\n'
+        csvString = 'date,category,amount,description\n'
         for item in data:
-            csvString += f'{item["date"]},{item["category"]},{item["amount"]},{item["description"]}\n'
+            csvString += f'{item.get_key("date")},{item.get_key("category")},{item.get_key("amount")},{item.get_key("description")}\n'
         return csvString
     
-    def convert_csv_to_listdict(self, csv_data: str) -> list[dict]:
+    def convert_csv_to_listdict(self, csv_data: str) -> list[Expense]:
         """Convert a CSV string to a list of dictionaries."""
         lines = csv_data.strip().split('\n')
-        headers = lines[0].lower().split(',')
+        headers = lines[0].split(',')
         data = []
         for line in lines[1:]:
             values = line.split(',')
-            item = {headers[i]: values[i] for i in range(len(headers))}
+            item = Expense(
+                date=values[0],
+                category=values[1],
+                amount=float(values[2]),
+                description=values[3]
+            )
             data.append(item)
         return data
     
