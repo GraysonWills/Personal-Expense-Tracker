@@ -31,7 +31,7 @@ class UIManager(CSVService, StateManager):
         print("-" * 57)
         
         for expense in expenses:
-        
+
             print("{:<12} {:<15} ${:<9.2f} {:<20}".format(
                 expense['date'],
                 expense['category'],
