@@ -84,7 +84,7 @@ class UIManager(CSVService, StateManager):
         
                 print(UIPrompts.UI_SAVE_FILE_PROMPT)
         
-                if input(UIPrompts.UI_SAVE_FILE_CHOICE) == '?':
+                if input(UIPrompts.UI_SAVE_LOAD_OVERWRITE_CHOICE) == '?':
                     print(UIPrompts.UI_OPERATION_CANCELLED)
                     return
         
@@ -100,23 +100,13 @@ class UIManager(CSVService, StateManager):
         
                     self.load_csv_async()
         
-                    print(UIPrompts.UI_LOAD_FILE_PROMPT)
-        
-                    choice = input(UIPrompts.UI_SELECT_AN_OPTION)
+                    if input(UIPrompts.UI_SAVE_LOAD_OVERWRITE_CHOICE) == '?':
+                        print(UIPrompts.UI_OPERATION_CANCELLED)
+                        return
         
                     self._loadThread.join()  # Wait for the thread to finish loading
         
-                    if choice == '1':
-                        self.set_expenses(list(set(self.get_expenses()) | set(self.asyncQueue.get())))
-        
-                    elif choice == '2':
-                        self.set_expenses(self.asyncQueue.get())
-        
-                    elif choice == '3':
-                        return  # Cancel the operation
-        
-                    else:
-                        print(UIPrompts.UI_IMPROPER_INPUT)
+                    self.set_expenses(self._asyncQueue.get())
         
                 except Exception as e:
                     print(UIPrompts.UI_LOAD_FILE_ERROR)
