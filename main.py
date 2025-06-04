@@ -107,6 +107,7 @@ class UIManager(CSVService, StateManager):
                     self._loadThread.join()  # Wait for the thread to finish loading
         
                     self.set_expenses(self._asyncQueue.get())
+                    self.recalculate_total_spent()
         
                 except Exception as e:
                     print(UIPrompts.UI_LOAD_FILE_ERROR)
@@ -116,7 +117,6 @@ class UIManager(CSVService, StateManager):
             
             else:
                 print(UIPrompts.UI_IMPROPER_INPUT)
-
 
 
 def main():
