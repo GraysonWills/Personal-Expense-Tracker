@@ -22,7 +22,7 @@ class UIManager(CSVService, StateManager):
     
         while True:
             try:
-                amount = float(input("Enter amount: "))
+                amount = input("Enter amount: ")
                 self.validate_number_input(amount)
                 break
             except ValueError:
@@ -30,19 +30,27 @@ class UIManager(CSVService, StateManager):
     
         description = input("Enter description: ")
 
-        self.create_expense(date=date, category=category, amount=amount, description=description)
-        print(f"Expense created: {date}, {category}, ${amount:.2f}, {description}")
+        expenseDictionary = {
+                    'date': date,
+                    'category': category,
+                    'amount': amount,
+                    'description': description
+                }
+        
+        self.add_expense(expenseDictionary)
+        print(f"Expense created!")
         self.check_budget()
 
     def display_expenses(self):
         expenses = self.get_expenses()
+        dictionaryKeys = list(expenses[0]._expense.keys())
         
-        print("\n{:<12} {:<15} {:<10} {:<20}".format("Date", "Category", "Amount", "Description")) # Table headers
+        print("\n{:<12} {:<15} {:<10} {:<20}".format(*[key.title() for key in dictionaryKeys])) # Table headers        
         print("-" * 57)
         
         for expense in expenses: 
-            print("{:<12} {:<15} ${:<9.2f} {:<20}".format( # Pythonic comprehension to format the output
-                *[expense.get_key(key) for key in ['date', 'category', 'amount', 'description']]
+            print("{:<12} {:<15} ${:<9.2} {:<20}".format( # Pythonic comprehension to format the output
+                *[expense.get_key(key) for key in dictionaryKeys]
             ))
         
     def set_a_budget(self) -> str:
@@ -132,7 +140,13 @@ class UIManager(CSVService, StateManager):
             else:
                 print(UIPrompts.UI_IMPROPER_INPUT)
 
-    def validate_number_input(self, value: float):
+    def validate_number_input(self, value: str | float):
+
+        try:
+            value = float(value)
+        except ValueError:
+            raise ValueError()
+        
         if value <= 0:
             raise ValueError()
         

@@ -17,7 +17,6 @@ class StateManager:
     def get_budget(self) -> float:
         return self._budget
     
-    
     def set_budget(self, budget: float):
         self._budget = budget
     
@@ -25,20 +24,14 @@ class StateManager:
         return self._totalSpent
     
     def recalculate_total_spent(self):
-        self._totalSpent = sum(expense.get_key('amount') for expense in self._expenses) # Pythonic comprehension to sum amounts
+        self._totalSpent = sum(float(expense.get_key('amount')) for expense in self._expenses) # Pythonic comprehension to sum amounts
     
     def check_budget(self) -> bool:        
         if self._totalSpent > self._budget:
             return False
         return True
     
-    def create_expense(self, **kwargs): # Wanted to practice using **kwargs
-        expense = Expense(
-            date=kwargs.get('date'), 
-            category=kwargs.get('category'), 
-            amount=kwargs.get('amount'), 
-            description=kwargs.get('description')
-            )
-        
+    def add_expense(self, expenseDictionary): 
+        expense = Expense(expenseDictionary)
         self._expenses.append(expense)
-        self._totalSpent += expense.get_key('amount')
+        self._totalSpent += float(expense.get_key('amount'))
