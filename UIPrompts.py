@@ -23,7 +23,7 @@ Would you like to set a budget for your expenses, or see your current budget?
 3. Cancel"""
 
 UI_TRACK_BUDGET_ERROR = """
-You have exceeded your budget by %.2f! Your total amount is %.2f and your budget is %.2f. Please set a budget amount higher than %.2f."""
+You have exceeded your budget by $%.2f! Your total amount is $%.2f and your budget is $%.2f. Please set a budget amount higher than $%.2f."""
 
 UI_SAVE_LOAD_CHOICE = """
 Would you like to save your expenses to a file, or load them from a file?
@@ -40,7 +40,11 @@ UI_SAVE_LOAD_OVERWRITE_CHOICE = f"""
 UI_LOAD_FILE_PROMPT = """
 Your current session will be overwritten if you load from a file."""
 
-UI_LOAD_FILE_ERROR = """
+UI_CORRUPT_DATA_WARNING = """
+The file you are trying to load is corrupted or not in the correct format.
+Please check the file and try again."""
+
+UI_NO_SAVED_EXPENSES = """
 Uh oh! Looks like you don't have a saved file to load from.
 Try saving your expenses first before loading them."""
 
@@ -55,6 +59,7 @@ Select an option: """
 
 UI_OPERATION_CANCELLED = """
 Operation cancelled"""
+
 
 
 

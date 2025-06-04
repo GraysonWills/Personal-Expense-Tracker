@@ -2,24 +2,25 @@ from threading import Thread
 import queue
 from ExpenseClass import Expense
 class CSVService:
+
     def __init__(self):
-        self.__csvFilePath = 'expenseTracker.csv'
+        self._csvFilePath = 'expenseTracker.csv'
         self._asyncQueue = queue.Queue()
         self._loadThread = None
         self._writeThread = None
 
     def convert_listdict_to_csv(self, data: list[Expense]) -> str:
-        """Convert a list of dictionaries to a CSV string."""
         csvString = 'date,category,amount,description\n'
+        
         for item in data:
             csvString += f'{item.get_key("date")},{item.get_key("category")},{item.get_key("amount")},{item.get_key("description")}\n'
+        
         return csvString
     
     def convert_csv_to_listdict(self, csv_data: str) -> list[Expense]:
-        """Convert a CSV string to a list of dictionaries."""
         lines = csv_data.strip().split('\n')
-        headers = lines[0].split(',')
         data = []
+
         for line in lines[1:]:
             values = line.split(',')
             item = Expense(
@@ -29,26 +30,32 @@ class CSVService:
                 description=values[3]
             )
             data.append(item)
+        
         return data
     
     def read_csv(self):
-        """Read the CSV file and return its content."""
-        with open(self.__csvFilePath, 'r') as file:
-            fullCSV = file.read()
-        self._asyncQueue.put(self.convert_csv_to_listdict(fullCSV))
+        try:
+            with open(self._csvFilePath, 'r') as file:
+                fullCSV = file.read()
+            
+            if not fullCSV.strip():
+                return
+            
+            data = self.convert_csv_to_listdict(fullCSV)
+            self._asyncQueue.put(data)
 
+        except:
+            return
+    
     def write_csv(self, data):
-        """Write data to the CSV file."""
         csvString = self.convert_listdict_to_csv(data)
-        with open(self.__csvFilePath, 'w') as file:
+        with open(self._csvFilePath, 'w') as file:
             file.writelines(csvString)
     
     def load_csv_async(self):
-        """Load CSV data asynchronously."""
         self._loadThread = Thread(target=self.read_csv)
         self._loadThread.start()
         
     def write_csv_async(self, data):
-        """Write data to the CSV file asynchronously."""
         self._writeThread = Thread(target=self.write_csv, args=(data,))
         self._writeThread.start()
