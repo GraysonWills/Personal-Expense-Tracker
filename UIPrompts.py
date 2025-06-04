@@ -2,6 +2,10 @@ UI_INITIAL_PROMPT = """
 Welcome to your expense tracker!
 """
 
+UI_INPUT_TO_CANCEL = """
+Input '?' to cancel
+"""
+
 UI_QUESTION_FLOW = """
 Please select an option to proceed:
 1. Create an Expense
@@ -37,6 +41,10 @@ UI_SAVE_FILE_PROMPT = """
 Your current save file (if you have one) will be overwritten. Press 1 to cancel, or any other key to continue.
 """
 
+UI_SAVE_FILE_CHOICE = """
+{UI_INPUT_TO_CANCEL}, or any other key to continue: 
+"""
+
 UI_LOAD_FILE_PROMPT = """
 Would you like append to your existing session or overwrite it?
 
@@ -56,6 +64,13 @@ UI_IMPROPER_INPUT = """
 Invalid choice. Please select a number from the given list.
 """
 
+UI_SELECT_AN_OPTION = """
+Select an option: 
+"""
+
+UI_OPERATION_CANCELLED = """
+Operation cancelled
+"""
 
 
 
