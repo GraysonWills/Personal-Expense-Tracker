@@ -56,6 +56,10 @@ UI_IMPROPER_INPUT = """
 Invalid choice. Please select a number from the given list.
 """
 
+UI_SELECT_AN_OPTION = """
+Select an option: 
+"""
+
 
 
 

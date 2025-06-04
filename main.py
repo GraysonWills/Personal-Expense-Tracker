@@ -43,14 +43,14 @@ class UIManager(CSVService, StateManager):
         
             print(UIPrompts.UI_BUDGET_CHOICE)
         
-            budget_choice = input("Select an option: ")
+            budget_choice = input(UIPrompts.UI_SELECT_AN_OPTION)
             
             if budget_choice == '1':
                 budget = float(input("Enter your budget: "))
                 self.set_budget(budget)
             
             elif budget_choice == '2':
-                print("Current budget:", self.get_budget())
+                print("Current budget: ", self.get_budget())
 
             elif budget_choice == '3':
                 return
@@ -80,14 +80,14 @@ class UIManager(CSVService, StateManager):
     def save_or_load_expenses(self):
         
             print(UIPrompts.UI_SAVE_LOAD_CHOICE)
-            choice = input("Select an option: ")
+            choice = input(UIPrompts.UI_SELECT_AN_OPTION)
 
             if choice == '1':
         
                 print(UIPrompts.UI_SAVE_FILE_PROMPT)
         
-                if input("Press 1 to cancel, or any other key to continue: ") == '1':
-                    print("Save operation cancelled.")
+                if input(UIPrompts.UI_SAVE_FILE_CHOICE) == '?':
+                    print(UIPrompts.UI_OPERATION_CANCELLED)
                     return
         
                 self.write_csv_async(self.get_expenses())
@@ -104,7 +104,7 @@ class UIManager(CSVService, StateManager):
         
                     print(UIPrompts.UI_LOAD_FILE_PROMPT)
         
-                    choice = input("Select an option: ")
+                    choice = input(UIPrompts.UI_SELECT_AN_OPTION)
         
                     self.loadThread.join()  # Wait for the thread to finish loading
         
@@ -137,7 +137,7 @@ def main():
     print(UIPrompts.UI_INITIAL_PROMPT)
     while(True):
         print(UIPrompts.UI_QUESTION_FLOW)
-        choice = input("Select an option: ")
+        choice = input(UIPrompts.UI_SELECT_AN_OPTION)
         
         if choice == '1':
             ui_manager.create_an_expense()
