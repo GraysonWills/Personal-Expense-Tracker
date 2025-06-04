@@ -41,6 +41,8 @@ class StateManager:
     def get_total_spent(self) -> float:
         return self._totalSpent
     
+    def recalculate_total_spent(self) -> float:
+        self._totalSpent = sum(expense.get_key('amount') for expense in self._expenses)
     
     def check_budget(self) -> bool:
         """Check if the budget has been exceeded."""
