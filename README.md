@@ -28,6 +28,16 @@ Through this process I learned how valuable up‑front planning can be and how t
    python main.py
    ```
 
+## Running Tests
+To execute the unit tests use Python's built in `unittest` runner:
+
+```bash
+python -m unittest discover -v
+```
+
+The `-v` flag shows a line for every test and clearly reports any failures with
+the file and line number where the assertion failed.
+
 ## Codebase Structure
 - `main.py` – Entry point. Provides the command line loop.
 - `UIManager.py` – Handles user interactions and coordinates actions.
