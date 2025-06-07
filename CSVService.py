@@ -55,30 +55,4 @@ class CSVService:
     def write_csv_async(self):
         self._writeThread = Thread(target=self.write_csv)
         self._writeThread.start()
-    
-    def read_csv(self):
-        try:
-            with open(self._csvFilePath, 'r') as file:
-                fullCSV = file.read()
-            
-            if not fullCSV.strip():
-                return
-            
-            data = self.convert_csv_to_listdict(fullCSV)
-            self._asyncQueue.put(data)
 
-        except:
-            return
-    
-    def write_csv(self, data):
-        csvString = self.convert_listdict_to_csv(data)
-        with open(self._csvFilePath, 'w') as file:
-            file.writelines(csvString)
-    
-    def load_csv_async(self):
-        self._loadThread = Thread(target=self.read_csv)
-        self._loadThread.start()
-        
-    def write_csv_async(self, data):
-        self._writeThread = Thread(target=self.write_csv, args=(data,))
-        self._writeThread.start()

@@ -8,19 +8,24 @@ class StateManager:
         self._budget = float('inf') # Set to infinity by default to mean that no budget is set
         self._totalSpent = 0.0 # Set to 0.0 to avoid issues with float precision
     
-    def get_expenses(self) -> list[Expense]:
+    @property
+    def expenses(self) -> list[Expense]:
         return self._expenses
-
-    def set_expenses(self, expenses: list[Expense]):
+    
+    @expenses.setter
+    def expenses(self, expenses: list[Expense]):
         self._expenses = expenses    
     
-    def get_budget(self) -> float:
+    @property
+    def budget(self) -> float:
         return self._budget
     
-    def set_budget(self, budget: float):
+    @budget.setter
+    def budget(self, budget: float):
         self._budget = budget
     
-    def get_total_spent(self) -> float:
+    @property
+    def total_spent(self) -> float:
         return self._totalSpent
     
     def recalculate_total_spent(self):

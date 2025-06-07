@@ -42,8 +42,8 @@ class UIManager(CSVService, StateManager):
         self.check_budget()
 
     def display_expenses(self):
-        expenses = self.get_expenses()
-        dictionaryKeys = list(expenses[0]._expense.keys())
+        expenses = self.expenses
+        dictionaryKeys = list(expenses[0].expense.keys())
         
         print("\n{:<12} {:<15} {:<10} {:<20}".format(*[key.title() for key in dictionaryKeys])) # Table headers        
         print("-" * 57)
@@ -64,17 +64,17 @@ class UIManager(CSVService, StateManager):
                     try:
                         budget = float(input("Enter your budget: "))
                         self.validate_number_input(budget)
-                        self.set_budget(budget)
+                        self.budget = budget
                         print(f"Budget set to: ${budget:.2f}")
                         break
                     except ValueError:
                         print("Invalid budget. Please enter a valid input. It must be a positive number with up to two decimal places.")
 
             elif budget_choice == '2':
-                if self.get_budget() == float('inf'):
+                if self.budget == float('inf'):
                     print("No budget has been set yet.")
                     return
-                print(f"Current budget: ${self.get_budget():.2f}")
+                print(f"Current budget: ${self.budget:.2f}")
 
             elif budget_choice == '3':
                 return
@@ -87,9 +87,9 @@ class UIManager(CSVService, StateManager):
 
             
     def check_budget(self):
-        if self.get_total_spent() > self.get_budget():
-                total_spent = self.get_total_spent()
-                budget = self.get_budget()
+        if self.total_spent > self.budget:
+                total_spent = self.total_spent
+                budget = self.budget
                 over_budget_amount = total_spent - budget
                 recommended_budget = budget + over_budget_amount
                 print(UIPrompts.UI_TRACK_BUDGET_ERROR % (over_budget_amount, total_spent, budget, recommended_budget))
@@ -106,7 +106,7 @@ class UIManager(CSVService, StateManager):
                     print(UIPrompts.UI_OPERATION_CANCELLED)
                     return
         
-                self.write_csv_async(self.get_expenses())
+                self.write_csv_async(self.expenses)
                 self._writeThread.join()
                 print("Expenses saved successfully.")
 
@@ -124,7 +124,7 @@ class UIManager(CSVService, StateManager):
         
                     self._loadThread.join()  # Wait for the thread to finish loading
                     if not self._asyncQueue.empty():
-                        self.set_expenses(self._asyncQueue.get())
+                        self.expenses = self._asyncQueue.get()
                     else:
                         print(UIPrompts.UI_CORRUPT_DATA_WARNING)
                         return
@@ -132,7 +132,7 @@ class UIManager(CSVService, StateManager):
                     self.recalculate_total_spent()
         
                 except Exception as e:
-                    print(UIPrompts.UI_LOAD_FILE_ERROR)
+                    print(UIPrompts.UI_CORRUPT_DATA_WARNING)
 
             elif choice == '3':
                 return
