@@ -62,9 +62,9 @@ class UIManager(CSVService, StateManager):
             if budget_choice == '1':
                 while True:
                     try:
-                        budget = float(input("Enter your budget: "))
+                        budget = input("Enter your budget: ")
                         self.validate_number_input(budget)
-                        self.budget = budget
+                        self.budget = float(budget)
                         print(f"Budget set to: ${budget:.2f}")
                         break
                     except ValueError:
@@ -140,7 +140,7 @@ class UIManager(CSVService, StateManager):
             else:
                 print(UIPrompts.UI_IMPROPER_INPUT)
 
-    def validate_number_input(self, value: str | float):
+    def validate_number_input(self, value: str):
 
         try:
             value = float(value)
