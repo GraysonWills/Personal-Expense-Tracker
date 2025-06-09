@@ -11,24 +11,24 @@ class UIManager(CSVService, StateManager):
     def create_an_expense(self):
         while True:
             try:
-                date_input = input("Enter date (YYYY-MM-DD): ")
+                date_input = input(UIPrompts.UI_EXPENSE_DATE_PROMPT)
                 from datetime import datetime
                 date = datetime.strptime(date_input, '%Y-%m-%d').strftime('%Y-%m-%d') # Throws an error if the date is invalid
                 break
             except ValueError:
-                print("Invalid date format. Please use YYYY-MM-DD format.")
+                print(UIPrompts.UI_INVALID_DATE_FORMAT)
 
-        category = input("Enter category: ")
+        category = input(UIPrompts.UI_EXPENSE_CATEGORY_PROMPT)
     
         while True:
             try:
-                amount = input("Enter amount: ")
+                amount = input(UIPrompts.UI_EXPENSE_AMOUNT_PROMPT)
                 self.validate_number_input(amount)
                 break
             except ValueError:
-                print("Invalid amount. Please enter a valid input. It must be a positive number with up to two decimal places.")
+                print(UIPrompts.UI_INVALID_AMOUNT)
     
-        description = input("Enter description: ")
+        description = input(UIPrompts.UI_EXPENSE_DESCRIPTION_PROMPT)
 
         expenseDictionary = {
                     'date': date,
@@ -38,15 +38,15 @@ class UIManager(CSVService, StateManager):
                 }
         
         self.add_expense(expenseDictionary)
-        print(f"Expense created!")
+        print(UIPrompts.UI_EXPENSE_CREATED)
         self.check_budget()
 
     def display_expenses(self):
         expenses = self.expenses
-        dictionaryKeys = list(expenses[0].expense.keys())
+        dictionaryKeys = list(expenses[0]._expense.keys())
         
         print("\n{:<12} {:<15} {:<10} {:<20}".format(*[key.title() for key in dictionaryKeys])) # Table headers        
-        print("-" * 57)
+        print(UIPrompts.UI_EXPENSE_TABLE_SEPARATOR)
         
         for expense in expenses: 
             print("{:<12} {:<15} ${:<9.2} {:<20}".format( # Pythonic comprehension to format the output
@@ -62,19 +62,19 @@ class UIManager(CSVService, StateManager):
             if budget_choice == '1':
                 while True:
                     try:
-                        budget = input("Enter your budget: ")
+                        budget = input(UIPrompts.UI_BUDGET_PROMPT)
                         self.validate_number_input(budget)
                         self.budget = float(budget)
-                        print(f"Budget set to: ${budget:.2f}")
+                        print(UIPrompts.UI_BUDGET_SET % float(budget))
                         break
                     except ValueError:
-                        print("Invalid budget. Please enter a valid input. It must be a positive number with up to two decimal places.")
+                        print(UIPrompts.UI_INVALID_BUDGET)
 
             elif budget_choice == '2':
                 if self.budget == float('inf'):
-                    print("No budget has been set yet.")
+                    print(UIPrompts.UI_NO_BUDGET_SET)
                     return
-                print(f"Current budget: ${self.budget:.2f}")
+                print(UIPrompts.UI_CURRENT_BUDGET % self.budget)
 
             elif budget_choice == '3':
                 return
@@ -108,7 +108,7 @@ class UIManager(CSVService, StateManager):
         
                 self.write_csv_async(self.expenses)
                 self._writeThread.join()
-                print("Expenses saved successfully.")
+                print(UIPrompts.UI_EXPENSES_SAVED)
 
             elif choice == '2':
                 if not os.path.exists(self._csvFilePath):

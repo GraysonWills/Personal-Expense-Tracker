@@ -52,7 +52,7 @@ class CSVService:
         self._loadThread = Thread(target=self.read_csv)
         self._loadThread.start()
         
-    def write_csv_async(self):
-        self._writeThread = Thread(target=self.write_csv)
+    def write_csv_async(self, data):
+        self._writeThread = Thread(target=self.write_csv, args=(data,))
         self._writeThread.start()
 
