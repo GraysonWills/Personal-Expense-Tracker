@@ -36,7 +36,19 @@ class StateManager:
             return False
         return True
     
-    def add_expense(self, expenseDictionary): 
+    def add_expense(self, expenseDictionary):
         expense = Expense(expenseDictionary)
         self._expenses.append(expense)
         self._totalSpent += float(expense.get_key('amount'))
+
+    def set_budget(self, budget: float):
+        """Set a numeric budget for expenses."""
+        self._budget = float(budget)
+
+    def get_expenses(self) -> list[Expense]:
+        """Return the current list of Expense objects."""
+        return self._expenses
+
+    def get_total_spent(self) -> float:
+        """Return the total amount spent across all expenses."""
+        return self._totalSpent
